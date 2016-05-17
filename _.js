@@ -8,7 +8,8 @@ Schemas.Knot = new SimpleSchema({
   },
 
   claim: {
-    type: [Object]
+    type: [Object],
+    optional: true
   },
 
   'claim.$.userId': {
@@ -71,8 +72,7 @@ Schemas.Knot = new SimpleSchema({
 
   createdBy: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    autoValue: function(){ return this.userId }
+    regEx: SimpleSchema.RegEx.Id
   }
 
 });
@@ -168,7 +168,17 @@ Meteor.users.helpers({
 
 /////////////
 
+Knots.allow({
+  insert: function(){return true;},
+  update: function(){return true;},
+  remove: function(){return true;}
+});
+
+/////////////
+
 if (Meteor.isClient) {
+
+  AutoForm.debug();
 
   Meteor.subscribe('users');
   Meteor.subscribe('relations');
@@ -182,7 +192,17 @@ if (Meteor.isClient) {
        userIds: {
          "$in": [Meteor.userId()]
        }
+     }); },
+
+    relationLink: function() { return "/relation/" + this._id; },
+
+    badges: function() {
+     return Badges.find( {
+       userIds: {
+         "$in": [Meteor.userId()]
+       }
      }); }
+
   });
 
   Template.users.helpers({
@@ -231,6 +251,18 @@ if (Meteor.isClient) {
 
     patchName: function(){
       return Patches.findOne(this.patchId).displayName
+    },
+
+    preKnot: function(){
+      return {
+       relationId: this._id,
+       createdBy: Meteor.userId(),
+       createdAt: new Date()
+      };
+    },
+
+    insertKnotFormSchema: function(){
+      return Schemas.Knot
     }
   });
 
@@ -270,5 +302,22 @@ if (Meteor.isServer) {
   Meteor.publish('patches', function(){
     return Patches.find();
   })
+
+  Meteor.methods({
+    'knots.insert': function (knotLiteral) {
+      // check(knotLiteral, Object);
+
+      // Make sure the user is logged in before inserting a task
+      if (! this.userId) {
+        throw new Meteor.Error('not-authorized');
+      } else {
+       knotLiteral.createdBy = this.userId
+       console.log(JSON.stringify(knotLiteral))
+       Knots.insert(knotLiteral);
+      }
+
+
+    }
+  });
 
 }
