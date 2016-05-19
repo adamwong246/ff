@@ -1,0 +1,33 @@
+with relation
+  h2= displayName
+  p createdBy: {{createdBy}}
+  if members
+    h3  members
+    ul
+      each members
+        = this
+
+  if canEdit
+    +quickForm(collection="Relations" id=formId type="update" doc=this)
+
+  if canView
+    ul
+      each knots
+        li
+          | #{{_id}} - {{creatorName}} said:
+          p.well
+            | {{body}}
+            ul
+              each claim
+                li
+                  b {{claimaintName}}
+                  |  claimed
+                  b {{patchName}}
+  if canPost
+    +autoForm(id="insertKnotForm" type="method" meteormethod="knots.insert" schema=insertKnotFormSchema doc=preKnot)
+      +afQuickField(name='body' rows=5)
+      +afQuickField(name='claim' )
+      +afQuickField(name='relationId' type="hidden")
+      +afQuickField(name='createdAt' type="hidden")
+      +afQuickField(name='createdBy' type="hidden")
+      button.btn.btn-primary(type='submit') Post to thread

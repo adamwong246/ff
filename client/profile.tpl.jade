@@ -1,0 +1,16 @@
+h3 My relations
+ul
+  each relations
+    li
+      a(href='{{relationLink}}')= displayName
+h3 My badges
+ul
+  each badges
+    li= displayName
+h3 My patches
+ul
+  each pinnableKnots
+    li
+      = _id
+      with possiblePatch
+        = displayName

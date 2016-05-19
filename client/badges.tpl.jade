@@ -1,0 +1,8 @@
+h2 Badges 
+p Badges exist in limited quantities and can only be assigned to user's by an admin.
+ul
+  each badges
+    li
+      h3 {{_id}}
+      +quickForm(collection="Badges" id=formId type="update" doc=this)
++quickForm(collection="Badges" id="insertBadgeForm" type="insert")

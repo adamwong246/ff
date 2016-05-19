@@ -1,0 +1,14 @@
+h2 Relations
+p Relations are used to group 2 or more users
+ul
+  each relations
+    li
+      a(href='{{relationLink}}')  {{displayName}}
+h3  New relation
++autoForm(id="insertRelationForm" type="method" meteormethod="relations.insert" schema=insertRelationFormSchema doc=preRelation)
+//- +afQuickField(name='displayName')
+//-   +afQuickField(name='open')
+//-   +afQuickField(name='relationId' type="hidden")
+//-   +afQuickField(name='createdAt' type="hidden")
+//-   +afQuickField(name='createdBy' type="hidden")
+//- button.btn.btn-primary(type='submit') Post to thread
