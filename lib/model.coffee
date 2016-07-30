@@ -1,43 +1,11 @@
+_.mixin merge: ->
+  _.reduce arguments, ((list, obj) ->
+    _.extend list, obj
+  ), {}
+
 @Schemas = {}
-@Knots = new (Mongo.Collection)('knots')
-Schemas.Knot = new SimpleSchema(
-  body: type: String
-  claim:
-    type: [ Object ]
-    optional: true
-  'claim.$.userId':
-    type: String
-    autoform:
-      type: 'select'
-      options: ->
-        _.map Meteor.users.find().fetch(), (u) ->
-          {
-            value: u._id
-            label: u.name()
-          }
-  'claim.$.patchId':
-    type: String
-    autoform:
-      type: 'select'
-      options: ->
-        _.map Patches.find().fetch(), (u) ->
-          {
-            value: u._id
-            label: u.displayName
-          }
-  pinned:
-    type: Boolean
-    optional: true
-  relationId:
-    type: String
-    autoform:
-      type: 'select'
-      options: ->
-        _.map Relations.find().fetch(), (u) ->
-          {
-            value: u._id
-            label: u._id
-          }
+
+basicSchema =
   createdAt:
     type: Date
     label: 'Date'
@@ -46,13 +14,80 @@ Schemas.Knot = new SimpleSchema(
       if @isUpsert
         return { $setOnInsert: new Date }
       return
+
   createdBy:
     type: String
     regEx: SimpleSchema.RegEx.Id
-    autoValue: ->
-      @userId
-)
-Knots.attachSchema Schemas.Knot
+    autoValue: -> if (@isInsert && !@isSet)
+      if @isFromTrustedCode then @userId
+      else Meteor.userId()
+
+Schemas.User =
+  emails:
+    type: [Object]
+    optional: true
+  "emails.$.address":
+    type: String
+    regEx: SimpleSchema.RegEx.Email
+  "emails.$.verified":
+    type: Boolean
+  services:
+    type: Object
+    optional: true
+    blackbox: true
+  admin:
+    type: Boolean
+    optional: true
+  createdAt:
+    type: Date
+    label: 'Date'
+    autoValue: -> if ((@isInsert || @isUpsert) && !@isSet) then new Date
+
+Meteor.users.attachSchema(Schemas.User)
+
+@Knots = new (Mongo.Collection)('knots')
+
+Schemas.Knot = _.merge basicSchema,
+  body:
+    type: String
+    autoform:
+      rows: 10
+  relationId:
+    type: String
+    autoform:
+      type: 'select'
+      options: ->
+        _.map Relations.find().fetch(), (u) ->
+          value: u._id
+          label: u._id
+  # claim:
+  #   type: [ Object ]
+  #   optional: true
+  # 'claim.$.userId':
+  #   type: String
+  #   autoform:
+  #     type: 'select'
+  #     options: ->
+  #       _.map Meteor.users.find().fetch(), (u) ->
+  #         {
+  #           value: u._id
+  #           label: u.name()
+  #         }
+  # 'claim.$.patchId':
+  #   type: String
+  #   autoform:
+  #     type: 'select'
+  #     options: ->
+  #       _.map Patches.find().fetch(), (u) ->
+  #         {
+  #           value: u._id
+  #           label: u.displayName
+  #         }
+  # pinned:
+  #   type: Boolean
+  #   optional: true
+
+Knots.attachSchema  new SimpleSchema(Schemas.Knot)
 
 @Relations = new (Mongo.Collection)('relations')
 Schemas.Relation = new SimpleSchema(
@@ -66,17 +101,20 @@ Schemas.Relation = new SimpleSchema(
       afFieldInput: multiple: true
       options: ->
         _.map Meteor.users.find().fetch(), (u) ->
-          {
-            value: u._id
-            label: u.name()
-          }
-  'userIds.$': type: String
-  open: type: Boolean
+          value: u._id
+          label: u.name()
+  'userIds.$':
+    type: String
+  open:
+    type: Boolean
   createdBy:
     type: String
     regEx: SimpleSchema.RegEx.Id
-    autoValue: ->
-      @userId
+    autoform:
+      options: ->
+        _.map Meteor.users.find().fetch(), (u) ->
+          value: u._id
+          label: u.name()
 )
 Relations.attachSchema Schemas.Relation
 

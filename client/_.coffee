@@ -4,9 +4,14 @@ Meteor.subscribe 'relations'
 Meteor.subscribe 'knots'
 Meteor.subscribe 'badges'
 Meteor.subscribe 'patches'
-Template.main.helpers relations: ->
-  Relations.find open: true
+
+Template.main.helpers
+  relations: ->
+    Relations.find open: true
+
 Template.profile.helpers
+  email: ->
+    Meteor.user().emails[0].address
   relations: ->
     Relations.find userIds: '$in': [ Meteor.userId() ]
   relationLink: ->
@@ -36,6 +41,9 @@ Template.relations.helpers
     '/relation/' + @_id
   relationName: ->
     @displayName
+  insertRelationFormSchema: ->
+    Schemas.Relation
+
 Template.relationPage.helpers
   relation: ->
     Relations.findOne _id: FlowRouter.getParam('_id')
@@ -44,6 +52,8 @@ Template.relationPage.helpers
       Meteor.users.find _id: $in: @userIds
     else
       false
+  email: ->
+    @emails[0].address
   formId: ->
     'updateRelationForm-' + @_id
   knots: ->
@@ -55,19 +65,18 @@ Template.relationPage.helpers
   patchName: ->
     Patches.findOne(@patchId).displayName
   preKnot: ->
-    {
-      relationId: @_id
-      createdBy: Meteor.userId()
-      createdAt: new Date
-    }
+    relationId: @_id
+    createdBy: Meteor.userId()
+    createdAt: new Date
   insertKnotFormSchema: ->
-    Schemas.Knot
+    new SimpleSchema(Schemas.Knot)
   canEdit: ->
     @createdBy == Meteor.userId()
   canView: ->
     true
   canPost: ->
     _.include(@userIds, Meteor.userId()) or @open
+
 Template.patches.helpers
   patches: ->
     Patches.find()

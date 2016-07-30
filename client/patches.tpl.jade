@@ -3,7 +3,7 @@ p Patches can be claimed by an user.
 ul
   each patches
     li
-      h3 {{_id}}
+      span #{{_id}}
       +quickForm(collection="Patches" id=formId type="update" doc=this)
 
 +quickForm(collection="Patches" id="insertPatchForm" type="insert")

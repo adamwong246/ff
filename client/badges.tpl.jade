@@ -3,6 +3,6 @@ p Badges exist in limited quantities and can only be assigned to user's by an ad
 ul
   each badges
     li
-      h3 {{_id}}
+      span #{{_id}}
       +quickForm(collection="Badges" id=formId type="update" doc=this)
 +quickForm(collection="Badges" id="insertBadgeForm" type="insert")
