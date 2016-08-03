@@ -1,0 +1,12 @@
+h1 patch
+
+with patch
+  h2= displayName
+  p= description
+  with patchImage
+    img(src=url)
+
+if canEdit
+  hr
+  with patch
+    +quickForm(collection="Patches" id=formId type="update" doc=this)

@@ -1,0 +1,12 @@
+h1 badge
+
+with badge
+  h2= displayName
+  p= description
+  with badgeImage
+    img(src=url)
+
+if canEdit
+  hr
+  with badge
+    +quickForm(collection="Badges" id=formId type="update" doc=this)

@@ -3,32 +3,40 @@ with relation
     .col-xs-12
     
       h2= displayName
-      p createdBy: {{createdBy}}
-      if members
-        h3  members
-        ul
-          each members
-            li= email
+      p createdBy: {{createdByName}}
   .row
     .col-xs-6
+      h3 members
+      ul
+        each members
+          li
+            = memberName
+            if role
+              |({{role}})
       if canEdit
         +quickForm(collection="Relations" id=formId type="update" doc=this)
-    
+      else
+        .alert.alert-warning
+          p You can't edit this thread.
     .col-xs-6
       if canView
-        h3 Thread
-        ul
-          each knots
-            li
-              | #{{_id}} - {{creatorName}} said:
-              p.well
-                | {{body}}
-                ul
-                  each claim
-                    li
-                      b {{claimaintName}}
-                      |  claimed
-                      b {{patchName}}
+        if noKnots
+          .alert.alert-warning
+            p No messages yet on this thread
+        else
+          .well
+            each knots
+              .media
+                .media-left
+                  img.media-object(src=userProfileImageUrl style="width: 64px; height: 64px;")
+                .media-body
+                  h4.media-heading {{creatorName}}:
+                  p= body
+                  with claimedPatch
+                    p
+                      | and claimed
+                      b {{displayName}}
+                      img(src=patchImageUrl style="width: 64px; height: 64px;")
       if canPost
         h3 Post to knot to thread
         +quickForm(id="insertKnotForm" type="method" meteormethod="knots.insert" schema=insertKnotFormSchema doc=preKnot)

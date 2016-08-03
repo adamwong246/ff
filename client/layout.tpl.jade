@@ -7,23 +7,30 @@
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
         ul.nav.navbar-nav
           if currentUser
-            //- li.dropdown
-            //-   a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-            //-     | links
-            //-     span.caret
-            //-   ul.dropdown-menu
-            li
-              a(href='/users') users
-            li
-              a(href='/relations') relations
-            li
-              a(href='/badges') badges
-            li
-              a(href='/patches') patches
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                | links
+                span.caret
+              ul.dropdown-menu
+                li
+                  a(href='/users') users
+                li
+                  a(href='/relations') relations
+                li
+                  a(href='/badges') badges
+                li
+                  a(href='/patches') patches
 
         ul.nav.navbar-nav.navbar-right
-          if currentUser
+          with currentUser
+            //- li
+            //-   if admin
+            //-     li admin!
             li
-              a(href='/profile')  profile
+              a(href='/user/{{_id}}')
+                |profile
+                if admin
+                  |(admin)
+                
           +loginButtons
   +Template.dynamic(template=content)

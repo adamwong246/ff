@@ -1,8 +1,14 @@
 h2 Badges 
 p Badges exist in limited quantities and can only be assigned to user's by an admin.
-ul
-  each badges
-    li
-      span #{{_id}}
-      +quickForm(collection="Badges" id=formId type="update" doc=this)
-+quickForm(collection="Badges" id="insertBadgeForm" type="insert")
+
+each badges
+  a.media(href='/badge/{{_id}}')
+    .media-left
+      with badgeImage
+        img.media-object(src=url style="width: 64px; height: 64px;")
+    .media-body
+      h4.media-heading= displayName
+      = description
+
+if canInsert
+  +quickForm(collection="Badges" id="insertBadgeForm" type="insert")

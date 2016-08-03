@@ -1,18 +1,32 @@
-h1 profile
-h2= email
-h3 relations
-ul
-  each relations
-    li
-      a(href='{{relationLink}}')= displayName
-h3 badges
-ul
-  each badges
-    li= displayName
-h3 patches
-ul
-  each pinnableKnots
-    li
-      = _id
-      with possiblePatch
-        = displayName
+.container-fluid
+  .row #[.col-xs-12 #[h1 profile]]
+  .row
+    .col-xs-6
+      .media
+        .media-left
+          with userProfileImage
+            img.media-object(src=url style="width: 64px; height: 64px;")
+        with user
+          .media-body
+            h4.media-heading= name
+            with profile
+              p= bio
+      if canEdit
+        hr
+        +autoForm(collection="Meteor.users" id='userUpdate' type="update" doc=user)
+          +afQuickField(name='profile')
+          button.btn.btn-primary(type='submit') Save profile
+    .col-xs-6
+      h3 joined relations
+      ul
+        each relations
+          li
+            a(href='{{relationLink}}')= displayName
+      h3 assigned badges
+      ul
+        each badges
+          li= displayName
+      h3 claimed patches
+      ul
+        each myPatches
+          li= displayName

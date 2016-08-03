@@ -1,9 +1,14 @@
 h2  Patches
 p Patches can be claimed by an user.
-ul
-  each patches
-    li
-      span #{{_id}}
-      +quickForm(collection="Patches" id=formId type="update" doc=this)
 
-+quickForm(collection="Patches" id="insertPatchForm" type="insert")
+each patches
+  a.media(href='/patch/{{_id}}')
+    .media-left
+      with patchImage
+        img.media-object(src=url style="width: 64px; height: 64px;")
+    .media-body
+      h4.media-heading= displayName
+      = description
+
+if canInsert
+  +quickForm(collection="Patches" id="insertPatchForm" type="insert")

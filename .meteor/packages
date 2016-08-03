@@ -33,3 +33,7 @@ dburles:collection-helpers
 
 mquandalle:jade
 coffeescript
+
+cfs:standard-packages
+cfs:gridfs
+yogiben:autoform-file

@@ -18,10 +18,15 @@ Meteor.publish 'badges', ->
   Badges.find()
 Meteor.publish 'patches', ->
   Patches.find()
+Meteor.publish 'patchImages', ->
+  PatchImages.find()
+Meteor.publish 'badgeImages', ->
+  BadgeImages.find()
+Meteor.publish 'userImages', ->
+  UserImages.find()
 
 Meteor.methods
   'knots.insert': (knotLiteral) ->
-    # Make sure the user is logged in before inserting a task
     if !@userId
       throw new (Meteor.Error)('not-authorized')
     else
@@ -29,7 +34,6 @@ Meteor.methods
       console.log knotLiteral
       Knots.insert knotLiteral
   'relations.insert': (relationLiteral) ->
-    # Make sure the user is logged in before inserting a task
     if !@userId
       throw new (Meteor.Error)('not-authorized')
     else

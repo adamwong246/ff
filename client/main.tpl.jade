@@ -1,6 +1,20 @@
-h2 Welcome!
-h3  open relations
-ul
-  each relations
-    li
-      a(href='/relation/{{_id}}')= displayName
+.container-fluid
+  unless currentUser
+    .row
+      .col-xs-12
+        h1 freak flag
+        h2 the only social network of the freaks, by the freaks, and for the freaks.
+  else
+    .row
+      .col-xs-6
+        h3 Users
+        ul
+          each users
+            li
+              a(href='/user/{{_id}}')= name
+      .col-xs-6
+        h3 Relations
+        ul
+          each relations
+            li
+              a(href='/relation/{{_id}}')= displayName
