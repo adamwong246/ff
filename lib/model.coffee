@@ -68,19 +68,19 @@ Schemas.User = new SimpleSchema
 
 Meteor.users.attachSchema(Schemas.User)
 
-@Knots = new (Mongo.Collection)('knots')
+@Messages = new (Mongo.Collection)('messages')
 
-Schemas.Knot = _.merge basicSchema,
+Schemas.Message = _.merge basicSchema,
   body:
     type: String
     autoform:
       rows: 10
-  relationId:
+  groupId:
     type: String
     autoform:
       type: 'select'
       options: ->
-        _.map Relations.find().fetch(), (u) ->
+        _.map Groups.find().fetch(), (u) ->
           value: u._id
           label: u._id
   'claimedPatch':
@@ -95,12 +95,12 @@ Schemas.Knot = _.merge basicSchema,
             label: u.displayName
           }
 
-Knots.attachSchema  new SimpleSchema(Schemas.Knot)
+Messages.attachSchema  new SimpleSchema(Schemas.Message)
 
 Schemas.Role = new SimpleSchema
 
-@Relations = new (Mongo.Collection)('relations')
-Schemas.Relation = new SimpleSchema(
+@Groups = new (Mongo.Collection)('groups')
+Schemas.Group = new SimpleSchema(
   displayName: type: String
   open:
     type: Boolean
@@ -127,7 +127,7 @@ Schemas.Relation = new SimpleSchema(
      type: String
      optional: true
 )
-Relations.attachSchema Schemas.Relation
+Groups.attachSchema Schemas.Group
 
 @Badges = new (Mongo.Collection)('badges')
 
@@ -182,9 +182,9 @@ imageStore = new (FS.Store.GridFS)('images',
 @UserImages = new (FS.Collection)('userImages', stores: [ imageStore ])
 
 Meteor.users.helpers name: -> @emails[0].address
-Relations.helpers open: -> @userIds.length > 0
+Groups.helpers open: -> @userIds.length > 0
 
-Relations.allow
+Groups.allow
   insert: -> true
   update: -> true
   remove: -> true
@@ -196,7 +196,7 @@ Patches.allow
   insert: -> true
   update: -> true
   remove: -> true
-Knots.allow
+Messages.allow
   insert: -> true
   update: -> true
   remove: -> true

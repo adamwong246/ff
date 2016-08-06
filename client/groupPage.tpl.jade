@@ -1,4 +1,4 @@
-with relation
+with group
   .row
     .col-xs-12
     
@@ -14,18 +14,18 @@ with relation
             if role
               |({{role}})
       if canEdit
-        +quickForm(collection="Relations" id=formId type="update" doc=this)
+        +quickForm(collection="Groups" id=formId type="update" doc=this)
       else
         .alert.alert-warning
           p You can't edit this thread.
     .col-xs-6
       if canView
-        if noKnots
+        if noMessages
           .alert.alert-warning
             p No messages yet on this thread
         else
           .well
-            each knots
+            each messages
               .media
                 .media-left
                   img.media-object(src=userProfileImageUrl style="width: 64px; height: 64px;")
@@ -38,11 +38,11 @@ with relation
                       b {{displayName}}
                       img(src=patchImageUrl style="width: 64px; height: 64px;")
       if canPost
-        h3 Post to knot to thread
-        +quickForm(id="insertKnotForm" type="method" meteormethod="knots.insert" schema=insertKnotFormSchema doc=preKnot)
+        h3 Post to message to thread
+        +quickForm(id="insertMessageForm" type="method" meteormethod="messages.insert" schema=insertMessageFormSchema doc=preMessage)
         //- +afQuickField(name='body' rows=5)
         //- +afQuickField(name='claim' )
-        //- +afQuickField(name='relationId' type="hidden")
+        //- +afQuickField(name='groupId' type="hidden")
         //- +afQuickField(name='createdAt' type="hidden")
         //- +afQuickField(name='createdBy' type="hidden")
         //- button.btn.btn-primary(type='submit') Post to thread

@@ -19,11 +19,11 @@
           +afQuickField(name='profile')
           button.btn.btn-primary(type='submit') Save profile
     .col-xs-6
-      h3 joined relations
+      h3 joined groups
       ul
-        each relations
+        each groups
           li
-            a(href='{{relationLink}}')= displayName
+            a(href='{{groupLink}}')= displayName
       h3 assigned badges
       ul
         each badges

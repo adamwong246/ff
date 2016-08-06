@@ -1,7 +1,7 @@
 AutoForm.debug()
 Meteor.subscribe 'users'
-Meteor.subscribe 'relations'
-Meteor.subscribe 'knots'
+Meteor.subscribe 'groups'
+Meteor.subscribe 'messages'
 Meteor.subscribe 'badges'
 Meteor.subscribe 'patches'
 Meteor.subscribe 'patchImages'
@@ -16,8 +16,8 @@ user_IdOfPage = -> FlowRouter.getParam("_id")
 userOfPage = -> Meteor.users.findOne(user_IdOfPage())
 
 Template.main.helpers
-  relations: ->
-    Relations.find()
+  groups: ->
+    Groups.find()
   users: ->
     Meteor.users.find()
 
@@ -32,15 +32,15 @@ Template.users.helpers
   userProfileImage: ->
     UserImages.findOne(@profile.picture)
 
-Template.relations.helpers
-  relations: ->
-    Relations.find()
-  relationLink: ->
-    '/relation/' + @_id
-  relationName: ->
+Template.groups.helpers
+  groups: ->
+    Groups.find()
+  groupLink: ->
+    '/group/' + @_id
+  groupName: ->
     @displayName
   insertRelationFormSchema: ->
-    Schemas.Relation
+    Schemas.Group
 
 Template.patches.helpers
   patches: ->

@@ -2,10 +2,10 @@ FlowRouter.route '/', action: ->
   BlazeLayout.render 'layout', content: 'main'
 FlowRouter.route '/users', action: ->
   BlazeLayout.render 'layout', content: 'users'
-FlowRouter.route '/relations', action: ->
-  BlazeLayout.render 'layout', content: 'relations'
-FlowRouter.route '/relation/:_id', action: (params) ->
-  BlazeLayout.render 'layout', content: 'relationPage'
+FlowRouter.route '/groups', action: ->
+  BlazeLayout.render 'layout', content: 'groups'
+FlowRouter.route '/group/:_id', action: (params) ->
+  BlazeLayout.render 'layout', content: 'groupPage'
 FlowRouter.route '/badges', action: ->
   BlazeLayout.render 'layout', content: 'badges'
 FlowRouter.route '/badge/:_id', action: ->

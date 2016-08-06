@@ -24,21 +24,21 @@ Template.profile.helpers
       # console.log location
       center: new google.maps.LatLng(Number(location[0]), Number(location[1])),
       zoom: 5
-  relations: ->
-    Relations.find
+  groups: ->
+    Groups.find
       members:
         '$elemMatch':
           _id: user_IdOfPage()
-  relationLink: ->
-    '/relation/' + @_id
+  groupLink: ->
+    '/group/' + @_id
   badges: ->
     Badges.find
       userIds:
         '$in': [ user_IdOfPage() ]
   badgeImage: ->
     BadgeImages.findOne(@picture)
-  pinnableKnots: ->
-    Knots.find
+  pinnableMessages: ->
+    Messages.find
       $and: [
         {claimedPatch: {$exists: true}},
         {createdBy: user_IdOfPage()}
@@ -46,7 +46,7 @@ Template.profile.helpers
   myPatches: ->
     Patches.find
       _id:
-        $in: _.map Knots.find(
+        $in: _.map Messages.find(
           {$and: [
             {claimedPatch: {$exists: true}},
             {createdBy: user_IdOfPage()}

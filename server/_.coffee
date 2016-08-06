@@ -1,19 +1,19 @@
 Meteor.publish 'users', ->
   Meteor.users.find()
-Meteor.publish 'relations', ->
+Meteor.publish 'groups', ->
   thisUser = Meteor.users.findOne(@userId)
   if thisUser.admin
-    Relations.find()
+    Groups.find()
   else
-    Relations.find(
+    Groups.find(
       $or: [
         {open: true},
         {userIds: {$in: [@userId]}},
         {createdBy: @userId}
       ]
     )
-Meteor.publish 'knots', ->
-  Knots.find()
+Meteor.publish 'messages', ->
+  Messages.find()
 Meteor.publish 'badges', ->
   Badges.find()
 Meteor.publish 'patches', ->
@@ -26,16 +26,16 @@ Meteor.publish 'userImages', ->
   UserImages.find()
 
 Meteor.methods
-  'knots.insert': (knotLiteral) ->
+  'messages.insert': (messageLiteral) ->
     if !@userId
       throw new (Meteor.Error)('not-authorized')
     else
-      knotLiteral.createdBy = @userId
-      console.log knotLiteral
-      Knots.insert knotLiteral
-  'relations.insert': (relationLiteral) ->
+      messageLiteral.createdBy = @userId
+      console.log messageLiteral
+      Messages.insert messageLiteral
+  'groups.insert': (groupLiteral) ->
     if !@userId
       throw new (Meteor.Error)('not-authorized')
     else
-      relationLiteral.createdBy = @userId
-      Relations.insert relationLiteral
+      groupLiteral.createdBy = @userId
+      Groups.insert groupLiteral
