@@ -3,3 +3,14 @@
 #logo {
   max-width: 2em
 }
+
+.map-container {
+  /*width: 800px;*/
+  max-width: 100%;
+  height: 500px;
+}
+
+.patch-image, .badge-image, .media-object {
+  width: 64px;
+  height: 64px;
+}

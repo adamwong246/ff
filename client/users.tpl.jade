@@ -1,8 +1,4 @@
 h2 Users
-//- ul
-//-   each users
-//-     li
-//-       a(href='/user/{{_id}}')= email
 
 each users
   .media
@@ -11,5 +7,5 @@ each users
         img.media-object(src=url style="width: 64px; height: 64px;")
     a.media-body(href='/user/{{_id}}')
       h4.media-heading= name
-      with profile
-        p= bio
+      //- with profile
+      //-   p= bio

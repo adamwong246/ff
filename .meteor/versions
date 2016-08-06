@@ -40,6 +40,7 @@ check@1.1.0
 coffeescript@1.0.11
 cosmos:browserify@0.9.4
 dburles:collection-helpers@1.0.4
+dburles:google-maps@1.1.5
 ddp@1.2.2
 ddp-client@1.2.1
 ddp-common@1.2.2
@@ -114,4 +115,5 @@ url@1.0.5
 webapp@1.2.3
 webapp-hashing@1.0.5
 yogiben:autoform-file@0.4.2
+yogiben:autoform-map@0.2.0
 zimme:select2-bootstrap3-css@1.4.6

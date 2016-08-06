@@ -5,12 +5,14 @@
       .media
         .media-left
           with userProfileImage
-            img.media-object(src=url style="width: 64px; height: 64px;")
+            img.media-object(src=url)
         with user
           .media-body
             h4.media-heading= name
             with profile
               p= bio
+            .map-container
+              +googleMap(name="exampleMap" options=profileMapOptions)
       if canEdit
         hr
         +autoForm(collection="Meteor.users" id='userUpdate' type="update" doc=user)
@@ -25,8 +27,15 @@
       h3 assigned badges
       ul
         each badges
-          li= displayName
+          li
+            with badgeImage
+              img.badge-image(src=url)
+            a(href="/badge/{{_id}}")= displayName
+            
       h3 claimed patches
       ul
         each myPatches
-          li= displayName
+          li
+            with patchImage
+              img.patch-image(src=url)
+            a(href="/patche/{{_id}}")= displayName

@@ -37,3 +37,6 @@ coffeescript
 cfs:standard-packages
 cfs:gridfs
 yogiben:autoform-file
+
+yogiben:autoform-map
+dburles:google-maps

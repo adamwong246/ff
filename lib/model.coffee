@@ -34,6 +34,14 @@ Schemas.Profile =
         type: 'fileUpload'
         collection: 'UserImages'
         label: 'Choose file'
+  location:
+    type: String
+    autoform:
+      type: 'map'
+      afFieldInput:
+        geolocation: true
+        searchBox: true
+        autolocate: true
 
 Schemas.User = new SimpleSchema
   emails:
@@ -90,7 +98,6 @@ Schemas.Knot = _.merge basicSchema,
 Knots.attachSchema  new SimpleSchema(Schemas.Knot)
 
 Schemas.Role = new SimpleSchema
-
 
 @Relations = new (Mongo.Collection)('relations')
 Schemas.Relation = new SimpleSchema(

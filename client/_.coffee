@@ -8,6 +8,10 @@ Meteor.subscribe 'patchImages'
 Meteor.subscribe 'badgeImages'
 Meteor.subscribe 'userImages'
 
+
+Meteor.startup ->
+  GoogleMaps.load({ v: '3', key: 'AIzaSyDjVfG_b37aEUqUcs19vHD8unQOH9BDfX0', libraries: 'geometry,places' })
+
 user_IdOfPage = -> FlowRouter.getParam("_id")
 userOfPage = -> Meteor.users.findOne(user_IdOfPage())
 
@@ -16,40 +20,6 @@ Template.main.helpers
     Relations.find()
   users: ->
     Meteor.users.find()
-
-Template.profile.helpers
-  canEdit: ->
-    user_IdOfPage() == Meteor.userId()
-  user: ->
-    userOfPage()
-  userProfileImage: ->
-    UserImages.findOne(userOfPage().profile.picture)
-  email: ->
-    userOfPage().emails[0].address
-  relations: ->
-    Relations.find 'members.$._id': '$in': [ user_IdOfPage() ]
-  relationLink: ->
-    '/relation/' + @_id
-  badges: ->
-    Badges.find 'members.$._id': '$in': [ user_IdOfPage() ]
-  pinnableKnots: ->
-    Knots.find
-      $and: [
-        {claimedPatch: {$exists: true}},
-        {createdBy: user_IdOfPage()}
-      ]
-  possiblePatch: ->
-    Patches.findOne(@claimedPatch)
-  myPatches: ->
-    Patches.find
-      _id:
-        $in: _.map Knots.find(
-          {$and: [
-            {claimedPatch: {$exists: true}},
-            {createdBy: user_IdOfPage()}
-          ]},
-          {_id: 1}
-        ).fetch(), (k) -> k.claimedPatch
 
 Template.users.helpers
   users: ->
@@ -71,47 +41,6 @@ Template.relations.helpers
     @displayName
   insertRelationFormSchema: ->
     Schemas.Relation
-
-Template.relationPage.helpers
-  userProfileImageUrl: ->
-    UserImages.findOne(Meteor.users.findOne(@createdBy).profile.picture).url()
-  patchImageUrl: ->
-    console.log @picture
-    PatchImages.findOne(@picture).url()
-  relation: ->
-    Relations.findOne _id: FlowRouter.getParam('_id')
-  memberName: ->
-    Meteor.users.findOne(@_id).name()
-  createdByName: ->
-    Meteor.users.findOne(@createdBy).name()
-  email: ->
-    @emails[0].address
-  formId: ->
-    'updateRelationForm-' + @_id
-  knots: ->
-    Knots.find relationId: @_id
-  noKnots: ->
-    Knots.find({relationId: @_id}).count() == 0
-  creatorName: ->
-    Meteor.users.findOne(@createdBy).name()
-  claimedPatch: ->
-    Patches.findOne(@claimedPatch)
-  preKnot: ->
-    relationId: @_id
-    createdBy: Meteor.userId()
-    createdAt: new Date
-  insertKnotFormSchema: ->
-    new SimpleSchema(Schemas.Knot)
-  canEdit: ->
-    @createdBy == Meteor.userId()
-  canView: ->
-    true
-  canPost: ->
-    _.include(
-      _.map(@users, (user) ->
-        user._id
-      ), Meteor.userId()
-    ) or @open
 
 Template.patches.helpers
   patches: ->
